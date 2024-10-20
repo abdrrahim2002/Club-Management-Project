@@ -1,0 +1,31 @@
+{% extends "events/base/base.html" %}
+
+{% block content %}
+  <center>
+    <h1>Add Venue To Database</h1>
+    </br></br> ID of user:{{user.id}}
+
+    {% if user.is_authenticated %}
+      
+      {% if submitted %}
+      <h3>your Venue was submitted succesfully!!!</h3>
+      
+      {% else %}
+        <form action="" method="post"  enctype="multipart/form-data"> <!--'enctype='multipart/form-data'' this is just to allow image data to be uploaded we don't need it but i just type it-->
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button value='Submit' type='submit' class='btn btn-secondary'>submit</button>
+        </form>
+      {% endif %}
+
+    {% else %}
+
+      <h1>Sorry you must be logged in to view this page...! </h1>
+      <a href={% url "login" %}>Logged in here</a>
+
+    {% endif %}
+  </center>
+
+{% endblock  %}
+
+

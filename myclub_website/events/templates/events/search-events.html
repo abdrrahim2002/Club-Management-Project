@@ -1,0 +1,70 @@
+{% extends "events/base/base.html" %}
+
+{% block content %}
+
+
+  </br></br>
+
+  
+  <div class="card">
+    <div class="card-header">
+      {% if searched %}
+        You search for : {{ searched }}</br>
+      {% else %}
+        Seach Events...
+      {% endif %}
+    </div>
+    
+    <div class="card-body">
+      <form  method='POST' action='{% url "search-events" %}'>
+        {% csrf_token %}
+
+        <input class="form-control me-2" type="search" placeholder="Search Venue" aria-label="Search" name='searched'>
+      </br>
+        <button class="btn btn-outline-secondary" type="submit">Search</button> </br>
+      </form>
+  </div>
+  </br></br>
+
+  {% if searched %}
+    
+    {% for event in events %}
+      <div class="card">
+        <div class="card-header">
+          {{event}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Venue: {{event.Venue}}</h5>
+          <p class="card-text">
+              <strong>Date: {{event.event_date}}</strong></br>
+              <strong>Venue Website: {{event.Venue.web}}</strong></br>
+              <strong>Manager:{{event.manager}}</strong></br>
+              <strong>Description: {{event.description}}</strong></br>
+        
+              <strong>Attendees:</strong></br>
+              {% for user in event.attendees.all %}
+                {{user}}</br>
+              {% endfor %}
+          </p>
+          
+        </div>
+        {% if user.is_authenticated %}
+          {% if user == event.manager %}
+            <div class="card-footer text-muted">
+              <a class='btn btn-outline-secondary btn-sm' href='{% url "update-event" event.id %}'>Update </a>
+              <a class='btn btn-outline-danger btn-sm' href='{% url "delete-event" event.id %}'>Delete </a>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+      </br></br>
+
+      
+    {% endfor %}
+    
+  
+  {% else %}
+    <h1>Hey! You Forget To Search</h1>
+  {% endif %}
+
+{% endblock  %}
